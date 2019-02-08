@@ -1,5 +1,8 @@
 # CI-server
 
+## Summary
+The goal of this project is to implements a small continuous integration CI server. We use Github as our development platform and C++ as the language. The CI server only contains some core features of continuous integration like compilation, testing and notification.
+
 ## Compiling
 
 This is one way to compile the project on a linux/debian based machine while in the project dir.
