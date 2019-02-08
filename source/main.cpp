@@ -8,6 +8,7 @@
 #include <unistd.h>
 
 #include "parser.h"
+#include "integrationTest.hpp"
 
 constexpr sa_family_t IPv4 = AF_INET;
 constexpr sa_family_t IPv6 = AF_INET6;
@@ -139,13 +140,16 @@ int main(int argc, char* argv[])
         std::string received_message = Receive(client_socket, max_size_to_receive);
         std::cout << "---- Receiving ----\n" <<  received_message << std::endl;
 
+        if (received_message.find("X-GitHub-Event: pull_request") == std::string::npos)
+            continue;
+
+        unsigned i = 0;
+        for (; i < received_message.size(); ++i)
+            if (received_message[i] == '{')
+                break;
 
         try
         {
-            unsigned i = 0;
-            for (; i < received_message.size(); ++i)
-                if (received_message[i] == '{')
-                    break;
 
             std::cout << "JSON:\n" << received_message.substr(i, received_message.size()) << std::endl;
 
@@ -157,26 +161,52 @@ int main(int argc, char* argv[])
             std::cout << parser.get_pr_user() << std::endl;
             std::cout << parser.get_pr_body() << std::endl;
             std::cout << parser.get_pr_url() << std::endl;
+
+            report information = integrationTest("104d50b76c74904767db9465486fdb2a161e1c1d", parser.get_clone_url(), "origin/assurance");
+
+            if (information.errorcode == 0)
+            {
+                std::string message =
+                        "HTTP/1.1 200 OK\n"
+                        "Content-Length: 12\n"
+                        "Connection: close\n"
+                        "Content-Type: text/html\n"
+                        "\n"
+                        "Hello world!";
+
+                std::cout << "---- Sending ----\n" << message << std::endl;
+
+                Send(client_socket, message);
+            }
+            else
+            {
+                std::string message =
+                        "HTTP/1.1 520\n"
+                        "Content-Length: " + std::to_string(information.message.size()) + "\n"
+                        "Connection: close\n"
+                        "Content-Type: text/html\n"
+                        "\n"
+                        + information.message;
+
+                std::cout << "---- Sending ----\n" << message << std::endl;
+                Send(client_socket, message);
+            }
+
         }
         catch (const nlohmann::detail::parse_error& error)
         {
             std::cerr << "Couldn't read event." << std::endl;
         }
 
-
-
         std::string message =
                 "HTTP/1.1 200 OK\n"
-                "Content-Length: 12\n"
+                "Content-Length: 14\n"
                 "Connection: close\n"
                 "Content-Type: text/html\n"
                 "\n"
-                "Hello world!";
-
+                "Goodbye world!";
         std::cout << "---- Sending ----\n" << message << std::endl;
-
         Send(client_socket, message);
-
     }
 
 
