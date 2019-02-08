@@ -31,3 +31,4 @@ ci_test$ ./build/unittest
 ### Fredrik Pilhqvist
 * Created integrationTest function that compiles and tests a commit.
 * Documented compiling.
+* Testing server
