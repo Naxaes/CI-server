@@ -242,3 +242,8 @@ using json = nlohmann::json;
     std::string Parser::get_pr_user(){
         return this->message["pull_request"]["user"]["login"];
     }
+
+    // Returns the sha of the pull request
+    std::string Parser::get_pr_sha(){
+        return this->message["pull_request"]["head"]["sha"];
+    }

@@ -79,3 +79,9 @@ TEST(Parser, GetUser)
     Parser parser(test_string);
     ASSERT_EQ(parser.get_pr_user(), "Codertocat");
 }
+
+TEST(Parser, GetSHA)
+{
+    Parser parser(test_string);
+    ASSERT_EQ(parser.get_pr_sha(), "34c5c7793cb3b279e22454cb6750c80560547b3a");
+}

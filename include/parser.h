@@ -29,6 +29,8 @@ public:
     std::string get_pr_time();
 
     std::string get_pr_user();
+
+    std::string get_pr_sha();
 };
 
 #endif //WEBHOOK_PARSER_H
