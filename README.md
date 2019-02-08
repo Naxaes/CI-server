@@ -26,7 +26,7 @@ ci_test$ ./build/unittest
 * Created the JSON parser class that extracts data from the HTTP payload.
 
 ### Ted Klein Bergman
-
+* Created main server 
 
 ### Yuanjue Li
 
