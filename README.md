@@ -6,6 +6,9 @@ The goal of this project is to implements a small continuous integration CI serv
 ## License
 This project is licensed under the MIT License - see the LICENSE.md file for details.
 
+## Prerequisites
+The project requires CMake (version 3.2 or higher), C++ (14 or higher) and ngrok.
+
 ## Compiling
 
 This is one way to compile the project on a linux/debian based machine while in the project dir.
