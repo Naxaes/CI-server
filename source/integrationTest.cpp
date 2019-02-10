@@ -17,7 +17,7 @@
 
 
 // Performes a system call and returns the output as a string
-std::string exec(const char* cmd) {
+std::string Exec(const char* cmd) {
     std::array<char, 128> buffer;
     std::string result;
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
@@ -32,7 +32,7 @@ std::string exec(const char* cmd) {
 
 
 // Clone the current repo into a selected folder
-report cloning(std::string sourceFolder, std::string cacheFolder, std::string repo)
+report Cloning(std::string sourceFolder, std::string cacheFolder, std::string repo)
 {
     // Clone the repo and save the output to a cache
     std::string cmd = "git clone --progress " + repo + " " + sourceFolder + " 2>  " + cacheFolder + "/git_clone_cache.txt";
@@ -40,7 +40,7 @@ report cloning(std::string sourceFolder, std::string cacheFolder, std::string re
 
     // Get the info from the cach into the method
     cmd = "cat " + cacheFolder + "/git_clone_cache.txt";
-    std::string cmd_output = exec(cmd.c_str());
+    std::string cmd_output = Exec(cmd.c_str());
 
     // Determine if the cloning went alright
     report rep;
@@ -64,7 +64,7 @@ report cloning(std::string sourceFolder, std::string cacheFolder, std::string re
 }
 
 // Checkout the given 'commit'
-report checkout(std::string sourceFolder, std::string cacheFolder, std::string commit)
+report Checkout(std::string sourceFolder, std::string cacheFolder, std::string commit)
 {
     // Checkout commit and save output to cache
     std::string cmd = "git --git-dir " + sourceFolder + "/.git checkout " + commit + " 2>  " + cacheFolder + "/git_checkout_cache.txt";
@@ -73,7 +73,7 @@ report checkout(std::string sourceFolder, std::string cacheFolder, std::string c
 
     // Get the info from the cach into the method
     cmd = "cat " + cacheFolder + "/git_checkout_cache.txt";
-    cmd_output = exec(cmd.c_str());
+    cmd_output = Exec(cmd.c_str());
 
     // TODO(fredrik): the find should determine the commit id
     report rep;
@@ -93,7 +93,7 @@ report checkout(std::string sourceFolder, std::string cacheFolder, std::string c
 
 
 // Merge to the target branch and determine if it could be done
-report merge(std::string sourceFolder, std::string targetBranch)
+report Merge(std::string sourceFolder, std::string targetBranch)
 {
     // Performe merge and take output
     std::string cmd = "git --git-dir " + sourceFolder + "/.git merge " + targetBranch;
@@ -116,11 +116,11 @@ report merge(std::string sourceFolder, std::string targetBranch)
 }
 
 // Determine if CMake could compile the code
-report compileCMake(std::string sourceFolder, std::string buildFolder)
+report CompileCMake(std::string sourceFolder, std::string buildFolder)
 {
     // Performe cmake
     std::string cmd = "cmake -B" + buildFolder + " -H" + sourceFolder;
-    std::string cmd_output = exec(cmd.c_str());
+    std::string cmd_output = Exec(cmd.c_str());
 
     //std::cerr << cmd_output; // USED IN DEBUGGING
     report rep;
@@ -139,10 +139,10 @@ report compileCMake(std::string sourceFolder, std::string buildFolder)
 }
 
 // Compile with the make file cretade by CMake in prev step
-report compileMake(std::string buildFolder)
+report CompileMake(std::string buildFolder)
 {
     std::string cmd = "make -C " + buildFolder;
-    std::string cmd_output = exec(cmd.c_str());
+    std::string cmd_output = Exec(cmd.c_str());
 
     report rep;
     if (cmd_output.find("100%") != std::string::npos)
@@ -160,10 +160,10 @@ report compileMake(std::string buildFolder)
 }
 
 // Run unittests in build folder
-report runUnittest(std::string buildFolder)
+report RunUnitTest(std::string buildFolder)
 {
     std::string cmd = buildFolder + "/unittest";
-    std::string cmd_output = exec(cmd.c_str());
+    std::string cmd_output = Exec(cmd.c_str());
 
     report rep;
     if (cmd_output.find("PASSED") != std::string::npos)
@@ -180,7 +180,7 @@ report runUnittest(std::string buildFolder)
     return rep;
 }
 
-report integrationTest(std::string commit, std::string repo, std::string targetBranch)
+report IntegrationTest(std::string commit, std::string repo, std::string targetBranch)
 {
     // Folders creatade during testing
     std::string buildFolder = "./temp/build";
@@ -189,72 +189,72 @@ report integrationTest(std::string commit, std::string repo, std::string targetB
 
     // Create folders
     std::string cmd = "mkdir -p " + buildFolder + " " + sourceFolder + " " + cacheFolder;
-    std::string cmd_output = exec(cmd.c_str());
+    std::string cmd_output = Exec(cmd.c_str());
 
     std::array<report, 6> reports;
 
     // Clone the repo into 'sourceFolder'
-    reports[0] = cloning(sourceFolder, cacheFolder, repo);
+    reports[0] = Cloning(sourceFolder, cacheFolder, repo);
     if (reports[0].errorcode != 0)
     {
         // something is not correct
         std::cerr << "cloning fail\n";
-        exec("rm -rf ./temp");
+        Exec("rm -rf ./temp");
         return reports[0];
     }
 
     // Checkout the given 'commit'
-    reports[1] = checkout(sourceFolder, cacheFolder, commit);
+    reports[1] = Checkout(sourceFolder, cacheFolder, commit);
     if (reports[1].errorcode != 0)
     {
         // something is not correct
         std::cerr << "checkout fail\n";
-        exec("rm -rf ./temp");
+        Exec("rm -rf ./temp");
         return reports[1];
     }
 
     // Performe a merge into 'targetBranch' to see if it can be done without issue
-    reports[2] = merge(sourceFolder, targetBranch);
+    reports[2] = Merge(sourceFolder, targetBranch);
     if (reports[2].errorcode != 0)
     {
         // something is not correct
         std::cerr << "merge fail\n";
-        exec("rm -rf ./temp");
+        Exec("rm -rf ./temp");
         return reports[2];
     }
 
     // Compile the code with 'CMake'
-    reports[3] = compileCMake(sourceFolder, buildFolder);
+    reports[3] = CompileCMake(sourceFolder, buildFolder);
     if (reports[3].errorcode != 0)
     {
         // something is not correct
         std::cerr << "compileCMake fail\n";
-        exec("rm -rf ./temp");
+        Exec("rm -rf ./temp");
         return reports[3];
     }
 
     // Comple the code with 'make'
-    reports[4] = compileMake(buildFolder);
+    reports[4] = CompileMake(buildFolder);
     if (reports[4].errorcode != 0)
     {
         // something is not correct
         std::cerr << "compileMake fail\n";
-        exec("rm -rf ./temp");
+        Exec("rm -rf ./temp");
         return reports[4];
     }
 
     // Performe unittest
-    reports[5] = runUnittest(buildFolder);
+    reports[5] = RunUnitTest(buildFolder);
     if (reports[5].errorcode != 0)
     {
         // something is not correct
         std::cerr << "runUnittest fail\n";
-        exec("rm -rf ./temp");
+        Exec("rm -rf ./temp");
         return reports[5];
     }
 
     // Cleanup
-    exec("rm -rf ./temp");
+    Exec("rm -rf ./temp");
 
 
     // Report results

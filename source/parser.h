@@ -16,21 +16,29 @@ class Parser {
 public:
     Parser();
 
+    //Initialize the parser with a given string
     Parser(string json_message);
 
-    string get_action();
+    //Return the pull request action(opened, edited, closed, merged, etc.)
+    string GetAction();
 
-    string get_pr_url();
+    //Return URL of the pull request
+    string GetPrURL();
 
-    string get_clone_url();
+    //Return clone URL of the repo
+    string GrtCloneURL();
 
-    string get_pr_title();
+    //Return the title of the pull request
+    string GetPrTitle();
 
-    string get_pr_body();
+    //Return the body of the pull request
+    string GetPrBody();
 
-    string get_pr_time();
+    //Return the time and data that the pull request was created
+    string GetPrTime();
 
-    string get_pr_user();
+    //Return the username of the creator of the pull request
+    string GetPrUser();
 };
 
 #endif //WEBHOOK_PARSER_H
