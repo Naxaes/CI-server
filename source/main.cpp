@@ -15,6 +15,7 @@ constexpr sa_family_t TCP = SOCK_STREAM;
 constexpr sa_family_t UDP = SOCK_DGRAM;
 
 
+// Converts an IP-address and port to a socket address.
 sockaddr_in Address(const std::string& address, int port)
 {
     // http://man7.org/linux/man-pages/man7/ip.7.html
@@ -34,7 +35,7 @@ sockaddr_in Address(const std::string& address, int port)
     return socket_address;
 }
 
-
+// Sends a message over the socket.
 void Send(int socket, std::string message)
 {
     ssize_t bytes_written = write(socket, message.c_str(), message.size());
@@ -42,7 +43,9 @@ void Send(int socket, std::string message)
         throw std::runtime_error("Couldn't write to socket.");
 }
 
-
+// Retrieves a message over the socket.
+// The function will halt and wait until a message becomes available.
+// The function will only fetch a maximum of 'max_size_to_receive' characters.
 std::string Receive(int socket, size_t max_size_to_receive)
 {
     char* message = new char[max_size_to_receive];
@@ -63,7 +66,8 @@ std::string Receive(int socket, size_t max_size_to_receive)
 }
 
 
-
+// Establishes a connection on the socket pointed at by address an port.
+// Will only allow 'max_number_of_clients' clients to connect to the socket.
 int ConnectServer(const std::string& address, int port, int max_number_of_clients)
 {
     // The steps involved in establishing a socket on the server side are as follows:
@@ -72,9 +76,6 @@ int ConnectServer(const std::string& address, int port, int max_number_of_client
     //     2. Bind the socket to an address using the bind() system call. For a server socket on the Internet,
     //        an address consists of a port number on the host machine.
     //     3. Listen for connections with the listen() system call.
-    //     4. Accept a connection with the accept() system call. This call typically blocks until a client connects
-    //        with the server.
-    //     5. Send and receive data.
 
     int success;
 
