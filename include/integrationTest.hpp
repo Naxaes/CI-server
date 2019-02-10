@@ -36,7 +36,7 @@ report CompileMake(std::string buildFolder);
 // Run unittests in build folder
 report RunUnitTest(std::string buildFolder);
 
-//
+// Check if the integrated project works well. If not, error message will be reported.
 report IntegrationTest(std::string commit, std::string repo, std::string targetBranch);
 
 
