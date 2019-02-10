@@ -16,21 +16,21 @@ public:
 
     Parser(std::string json_message);
 
-    std::string get_action();
+    std::string GetAction();
 
-    std::string get_pr_url();
+    std::string GetPrURL();
 
-    std::string get_clone_url();
+    std::string GetCloneURL();
 
-    std::string get_pr_title();
+    std::string GetPrTitle();
 
-    std::string get_pr_body();
+    std::string GetPrBody();
 
-    std::string get_pr_time();
+    std::string GetPrTime();
 
-    std::string get_pr_user();
+    std::string GetPrUser();
 
-    std::string get_pr_sha();
+    std::string GetPrSha();
 };
 
 #endif //WEBHOOK_PARSER_H

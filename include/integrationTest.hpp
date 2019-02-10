@@ -16,28 +16,28 @@ struct report
 };
 
 // Performes a system call and returns the output as a string
-std::string exec(const char* cmd);
+std::string Exec(const char* cmd);
 
 // Clone the current repo into a selected folder
-report cloning(std::string sourceFolder, std::string cacheFolder, std::string repo);
+report Cloning(std::string sourceFolder, std::string cacheFolder, std::string repo);
 
 // Checkout the given 'commit'
-report checkout(std::string sourceFolder, std::string cacheFolder, std::string commit);
+report Checkout(std::string sourceFolder, std::string cacheFolder, std::string commit);
 
 // Merge to the target branch and determine if it could be done
-report merge(std::string sourceFolder, std::string targetBranch);
+report Merge(std::string sourceFolder, std::string targetBranch);
 
 // Determine if CMake could compile the code
-report compileCMake(std::string sourceFolder, std::string buildFolder);
+report CompileCMake(std::string sourceFolder, std::string buildFolder);
 
 // Compile with the make file cretade by CMake in prev step
-report compileMake(std::string buildFolder);
+report CompileMake(std::string buildFolder);
 
 // Run unittests in build folder
-report runUnittest(std::string buildFolder);
+report RunUnitTest(std::string buildFolder);
 
 //
-report integrationTest(std::string commit, std::string repo, std::string targetBranch);
+report IntegrationTest(std::string commit, std::string repo, std::string targetBranch);
 
 
 #endif  // INCLUDE_INTEGRATIONTEST_H_

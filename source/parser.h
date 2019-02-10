@@ -18,19 +18,19 @@ public:
 
     Parser(string json_message);
 
-    string get_action();
+    string GetAction();
 
-    string get_pr_url();
+    string GetPrURL();
 
-    string get_clone_url();
+    string GrtCloneURL();
 
-    string get_pr_title();
+    string GetPrTitle();
 
-    string get_pr_body();
+    string GetPrBody();
 
-    string get_pr_time();
+    string GetPrTime();
 
-    string get_pr_user();
+    string GetPrUser();
 };
 
 #endif //WEBHOOK_PARSER_H
