@@ -1,0 +1,1 @@
+This folder exist to contain deprecated test cases to be used in debugging in future. The test cases should only be activated by specfic branches and not be a part of the main branch.
