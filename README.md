@@ -9,8 +9,9 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 ## Prerequisites
 The project requires CMake (version 3.2 or higher), C++ (14 or higher) and ngrok.
 
-## Coding Convention
-We are using Google's coding convention, which can be checked in <https://l.facebook.com/l.php?u=https%3A%2F%2Fgoogle.github.io%2Fstyleguide%2Fcppguide.html&h=AT2XiASN4MX-S1GhI-633n8PHGloked6j2fKYiiv6y5c2PBS0TMbnFDcrM6pT0yvrIB0HXj-U8nHvuqz3X-aofZoRWVswCyYKkJd3WoeRnXEHyA_hMmR2HCCcbSG86i-GVQIqQ>
+## Naming conventions
+We will use [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html) for the code, and 
+[this Git Style Guide](https://github.com/agis/git-style-guide) for commit messages.
 
 ## Compiling
 
