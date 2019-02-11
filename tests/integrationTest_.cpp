@@ -11,7 +11,7 @@
 TEST(RunIntegrationTest, correctly)
 {
 
-    std::string repo = "git@github.com:Pihlqvist/ci_test.git";
+    std::string repo = "https://github.com/Pihlqvist/ci_test.git";
     std::string commit = "6cc7e58d7cb0e4b7c06eee65f1f49b336050db22";
     std::string targetBranch = "origin/assurance";
 
@@ -27,7 +27,7 @@ TEST(RunIntegrationTest, correctly)
 TEST(runIntegrationTest, wrong_repo)
 {
 
-    std::string repo = "git@github.com:Pihlqvist/ci_test_WRONGID.git";
+    std::string repo = "https://github.com/Pihlqvist/ci_test_WRONG.git";
     std::string commit = "6cc7e58d7cb0e4b7c06eee65f1f49b336050db55";
     std::string targetBranch = "origin/assurance";
 
