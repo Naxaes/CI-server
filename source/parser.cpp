@@ -209,36 +209,41 @@ using json = nlohmann::json;
     }
 
     // Return the pull request action (opened, edited, closed, merged, etc)
-    std::string Parser::get_action(){
+    std::string Parser::GetAction(){
         return this->message["action"];
     }
 
     // Returns the url of the pull request
-    std::string Parser::get_pr_url(){
+    std::string Parser::GetPrURL(){
         return this->message["pull_request"]["url"];
     }
 
     // Returns the clone url of the repo
-    std::string Parser::get_clone_url(){
+    std::string Parser::GetCloneURL(){
         return this->message["pull_request"]["head"]["repo"]["clone_url"];
     }
 
     // Returns the title of the pull request
-    std::string Parser::get_pr_title(){
+    std::string Parser::GetPrTitle(){
         return this->message["pull_request"]["title"];
     }
 
     // Returns the body of the pull request
-    std::string Parser::get_pr_body(){
+    std::string Parser::GetPrBody(){
         return this->message["pull_request"]["body"];
     }
 
     // Returns the time and date that the pull request was created
-    std::string Parser::get_pr_time(){
+    std::string Parser::GetPrTime(){
         return this->message["pull_request"]["created_at"];
     }
 
     // Returns the username of the creator of the pull request
-    std::string Parser::get_pr_user(){
+    std::string Parser::GetPrUser(){
         return this->message["pull_request"]["user"]["login"];
+    }
+
+    // Returns the sha of the pull request
+    std::string Parser::GetPrSha(){
+        return this->message["pull_request"]["head"]["sha"];
     }

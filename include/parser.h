@@ -14,21 +14,32 @@ class Parser {
 public:
     Parser();
 
+    //Initialize the parser with a given string
     Parser(std::string json_message);
 
-    std::string get_action();
+    //Return the pull request action(opened, edited, closed, merged, etc.)
+    std::string GetAction();
 
-    std::string get_pr_url();
+    //Return URL of the pull request
+    std::string GetPrURL();
 
-    std::string get_clone_url();
+    //Return clone URL of the repo
+    std::string GetCloneURL();
 
-    std::string get_pr_title();
+    //Return the title of the pull request
+    std::string GetPrTitle();
 
-    std::string get_pr_body();
+    //Return the body of the pull request
+    std::string GetPrBody();
 
-    std::string get_pr_time();
+    //Return the time and data that the pull request was created
+    std::string GetPrTime();
 
-    std::string get_pr_user();
+    //Return the username of the creator of the pull request
+    std::string GetPrUser();
+
+    //Return the commit sha of the given payload
+    std::string GetPrSha();
 };
 
 #endif //WEBHOOK_PARSER_H

@@ -41,41 +41,47 @@ std::string test_string = R"V0G0N(
 TEST(Parser, GetAction)
 {
     Parser parser(test_string);
-    ASSERT_EQ(parser.get_action(), "closed");
+    ASSERT_EQ(parser.GetAction(), "closed");
 }
 
 TEST(Parser, GetURL)
 {
     Parser parser(test_string);
-    ASSERT_EQ(parser.get_pr_url(), "https://api.github.com/repos/Codertocat/Hello-World/pulls/1");
+    ASSERT_EQ(parser.GetPrURL(), "https://api.github.com/repos/Codertocat/Hello-World/pulls/1");
 }
 
 TEST(Parser, GetCloneURL)
 {
     Parser parser(test_string);
-    ASSERT_EQ(parser.get_clone_url(), "https://github.com/Codertocat/Hello-World.git");
+    ASSERT_EQ(parser.GetCloneURL(), "https://github.com/Codertocat/Hello-World.git");
 }
 
 TEST(Parser, GetTitle)
 {
     Parser parser(test_string);
-    ASSERT_EQ(parser.get_pr_title(), "Update the README with new information");
+    ASSERT_EQ(parser.GetPrTitle(), "Update the README with new information");
 }
 
 TEST(Parser, GetBody)
 {
     Parser parser(test_string);
-    ASSERT_EQ(parser.get_pr_body(), "This is a pretty simple change that we need to pull into master.");
+    ASSERT_EQ(parser.GetPrBody(), "This is a pretty simple change that we need to pull into master.");
 }
 
 TEST(Parser, GetTime)
 {
     Parser parser(test_string);
-    ASSERT_EQ(parser.get_pr_time(), "2018-05-30T20:18:30Z");
+    ASSERT_EQ(parser.GetPrTime(), "2018-05-30T20:18:30Z");
 }
 
 TEST(Parser, GetUser)
 {
     Parser parser(test_string);
-    ASSERT_EQ(parser.get_pr_user(), "Codertocat");
+    ASSERT_EQ(parser.GetPrUser(), "Codertocat");
+}
+
+TEST(Parser, GetSHA)
+{
+    Parser parser(test_string);
+    ASSERT_EQ(parser.GetPrSha(), "34c5c7793cb3b279e22454cb6750c80560547b3a");
 }
