@@ -1,7 +1,8 @@
 # CI-server
 
 ## Summary
-The goal of this project is to implements a small continuous integration CI server. We use Github as our development platform and C++ as the language. The CI server only contains some core features of continuous integration like compilation, testing and notification.
+This is an implementation of a small continuous integration CI-server that automatically tests code. The server is connected to a GitHub repository 
+through a webhook, and whenever a pull request is made, the server runs the tests and notifies the user of the results on the pull request page.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE.md file for details.
