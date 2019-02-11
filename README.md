@@ -55,6 +55,12 @@ And then press _"Add webhook"_.
 
 Now you should be up and running with an active CI-server!
 
+## Running test
+To make sure the project is in a working state, you can run the tests. If you've successfully compiled the project, you can run the tests by running the executable "unittest".
+```
+/build/unittest
+```
+
 ## Contributions
 
 ### Emma Good
