@@ -112,7 +112,16 @@ int ConnectServer(const std::string& address, int port, int max_number_of_client
     return listen_socket;
 }
 
+void sendMail(std::string target, std::string attachment)
+{
+    std::string smtp = "smtps://smtp.gmail.com:465";
+    std::string from = "ciserver21@gmail.com";
+    std::string cmd = "curl --url \'" + smtp + "\' --ssl-reqd " +
+      "--mail-from \'" + from +"\' --mail-rcpt \'" + target +"\' "+
+      "--upload-file " + attachment + " --user 'ciserver21@gmail.com:4Urth2NN' --insecure";
 
+    system(cmd.c_str());
+}
 
 int main(int argc, char* argv[])
 {
@@ -180,10 +189,13 @@ int main(int argc, char* argv[])
             std::cout << parser.GetPrBody()   << std::endl;
             std::cout << parser.GetPrURL()    << std::endl;
 
-            report information = IntegrationTest("104d50b76c74904767db9465486fdb2a161e1c1d", parser.GetCloneURL(), "origin/assurance");
+            report information = IntegrationTest(parser.GetPrSha(), parser.GetCloneURL(), "origin/master");
 
             if (information.errorcode == 0)
             {
+                // Send a mail telling the person that the build pased
+                sendMail("fpih@kth.se", "./resources/mail_resp_passed.txt");
+
                 std::string body = "{\n"
                                    "\"state\": \"passed\",\n"
                                    "\"target_url\": \"" + parser.GetPrURL() + "\",\n"
@@ -202,6 +214,9 @@ int main(int argc, char* argv[])
             }
             else
             {
+                // Send a mail telling the person that the build failed
+                sendMail("fpih@kth.se", "./resources/mail_resp_failed.txt");
+
                 std::string body = "{\n"
                                    "\"state\": \"failed\",\n"
                                    "\"target_url\": \"" + parser.GetPrURL() + "\",\n"
