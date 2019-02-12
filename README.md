@@ -71,9 +71,6 @@ To make sure the project is in a working state, you can run the tests. If you've
 * Created structure template.
 * Created the server.
 
-### Yuanjue Li
-
-
 ### Fredrik Pilhqvist
 * Created integrationTest function that compiles and tests a commit.
 * Documented compiling.
