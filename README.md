@@ -26,10 +26,6 @@ Secondly run the make file to create executables
 ```
 ci_test$ make -C ./build
 ```
-There are now executables in the build folder one of them should be unittest, example of a executable being ran.
-```
-ci_test$ ./build/unittest
-```
 
 ## How to use the project
 After compiling, you'll have an executable of the project. To get it actively running in your GitHub repository, here's the steps you need to take.
