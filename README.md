@@ -67,7 +67,9 @@ To make sure the project is in a working state, you can run the tests. If you've
 * Created the JSON parser class that extracts data from the HTTP payload.
 
 ### Ted Klein Bergman
-* Created main server 
+* Owner of the repository.
+* Created structure template.
+* Created the server.
 
 ### Yuanjue Li
 
