@@ -7,6 +7,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+#include "parser.h"
+#include "integrationTest.hpp"
 
 constexpr sa_family_t IPv4 = AF_INET;
 constexpr sa_family_t IPv6 = AF_INET6;
@@ -117,7 +119,7 @@ int main(int argc, char* argv[])
     std::string address = "0.0.0.0";
     int port = 8080;
     int maximum_clients = 1;
-    size_t max_size_to_receive = 1024;
+    size_t max_size_to_receive = 100000;
 
     int listen_socket = ConnectServer(address, port, maximum_clients);
 
@@ -136,27 +138,108 @@ int main(int argc, char* argv[])
             throw std::runtime_error("Couldn't accept request from client. Errno: " + std::to_string(errno) + ".");
 
 
-        std::cout << "---- Receiving ----\n" <<  Receive(client_socket, max_size_to_receive) << std::endl;
+        std::string received_message = Receive(client_socket, max_size_to_receive);
+        std::cout << "---- Receiving ----\n" <<  received_message << std::endl;
+
+        if (received_message.find("X-GitHub-Event: pull_request") == std::string::npos)
+            continue;
+
+        unsigned i = 0;
+        for (; i < received_message.size(); ++i)
+            if (received_message[i] == '{')
+                break;
+
+        try
+        {
+            std::cout << "JSON:\n" << received_message.substr(i, received_message.size()) << std::endl;
+            Parser parser(received_message.substr(i, received_message.size()));
 
 
-        std::string message =
-                "HTTP/1.1 200 OK\n"
-                "Content-Length: 12\n"
-                "Connection: close\n"
-                "Content-Type: text/html\n"
-                "\n"
-                "Hello world!";
+            // POST /repos/:owner/:repo/statuses/:sha
+            std::string body = "{\n"
+                               "\"state\": \"pending\",\n"
+                               "\"target_url\": \"" + parser.GetPrURL() + "\",\n"
+                               "\"description\": \"The build has started!\",\n"
+                               "\"context\": \"default\"\n"
+                               "};\n";
+            std::string message =
+                    "HTTP/1.1 200 OK\n"
+                    "Content-Length: " + std::to_string(body.size()) + "\n"
+                    "Connection: close\n"
+                    "Content-Type: text/html\n"
+                    "\n" + body;
 
-        std::cout << "---- Sending ----\n" << message << std::endl;
+            std::cout << "---- Sending ----\n" << message << std::endl;
+            Send(client_socket, message);
 
-        Send(client_socket, message);
+            std::cout << parser.GetCloneURL() << std::endl;
+            std::cout << parser.GetAction()   << std::endl;
+            std::cout << parser.GetPrTime()   << std::endl;
+            std::cout << parser.GetPrTitle()  << std::endl;
+            std::cout << parser.GetPrUser()   << std::endl;
+            std::cout << parser.GetPrBody()   << std::endl;
+            std::cout << parser.GetPrURL()    << std::endl;
 
+            report information = IntegrationTest("104d50b76c74904767db9465486fdb2a161e1c1d", parser.GetCloneURL(), "origin/assurance");
+
+            if (information.errorcode == 0)
+            {
+                std::string body = "{\n"
+                                   "\"state\": \"passed\",\n"
+                                   "\"target_url\": \"" + parser.GetPrURL() + "\",\n"
+                                   "\"description\": \"The build was successful!\",\n"
+                                   "\"context\": \"default\"\n"
+                                   "};\n";
+                std::string message =
+                        "HTTP/1.1 200 OK\n"
+                        "Content-Length: " + std::to_string(body.size()) + "\n"
+                        "Connection: close\n"
+                        "Content-Type: text/html\n"
+                        "\n" + body;
+
+                std::cout << "---- Sending ----\n" << message << std::endl;
+                Send(client_socket, message);
+            }
+            else
+            {
+                std::string body = "{\n"
+                                   "\"state\": \"failed\",\n"
+                                   "\"target_url\": \"" + parser.GetPrURL() + "\",\n"
+                                   "\"description\": \"The build has failed!\",\n"
+                                   "\"context\": \"default\"\n"
+                                   "};\n";
+                std::string message =
+                        "HTTP/1.1 200 OK\n"
+                        "Content-Length: " + std::to_string(body.size()) + "\n"
+                        "Connection: close\n"
+                        "Content-Type: text/html\n"
+                        "\n" + body;
+                std::cout << "---- Sending ----\n" << message << std::endl;
+                Send(client_socket, message);
+            }
+
+        }
+        catch (const nlohmann::detail::parse_error& error)
+        {
+            std::cerr << "Couldn't read event." << std::endl;
+            std::string body = "{\n"
+                               "\"state\": \"error\",\n"
+                               "\"target_url\": \"\",\n"
+                               "\"description\": \"The build has failed!\",\n"
+                               "\"context\": \"default\"\n"
+                               "};\n";
+            std::string message =
+                    "HTTP/1.1 200 OK\n"
+                    "Content-Length: " + std::to_string(body.size()) + "\n"
+                    "Connection: close\n"
+                    "Content-Type: text/html\n"
+                    "\n" + body;
+            std::cout << "---- Sending ----\n" << message << std::endl;
+            Send(client_socket, message);
+        }
     }
 
-
     close(listen_socket);
-
-
 }
 
 
