@@ -8,7 +8,7 @@ through a webhook, and whenever a pull request is made, the server runs the test
 This project is licensed under the MIT License - see the LICENSE.md file for details.
 
 ## Prerequisites
-The project requires CMake (version 3.2 or higher), C++ (14 or higher) and ngrok.
+The project requires CMake (version 3.2 or higher), C++ (14 or higher) and ngrok. The server will need a version of `curl` tested on `curl 7.47`.
 
 ## Naming conventions
 We will use [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html) for the code, and 
