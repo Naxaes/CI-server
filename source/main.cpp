@@ -132,6 +132,10 @@ int main(int argc, char* argv[])
 
     int listen_socket = ConnectServer(address, port, maximum_clients);
 
+    std::cout << "Email to push notifications to: " << std::endl;
+    std::string email;
+    std::cin >> email;
+
     std::cout << "Server connected. Waiting for clients." << std::endl;
 
     bool connected = true;
@@ -194,7 +198,7 @@ int main(int argc, char* argv[])
             if (information.errorcode == 0)
             {
                 // Send a mail telling the person that the build pased
-                sendMail("fpih@kth.se", "./resources/mail_resp_passed.txt");
+                sendMail(email, "../resources/mail_resp_passed.txt");
 
                 std::string body = "{\n"
                                    "\"state\": \"passed\",\n"
@@ -215,7 +219,7 @@ int main(int argc, char* argv[])
             else
             {
                 // Send a mail telling the person that the build failed
-                sendMail("fpih@kth.se", "./resources/mail_resp_failed.txt");
+                sendMail(email, "../resources/mail_resp_failed.txt");
 
                 std::string body = "{\n"
                                    "\"state\": \"failed\",\n"
