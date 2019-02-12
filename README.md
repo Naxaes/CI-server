@@ -57,6 +57,20 @@ To make sure the project is in a working state, you can run the tests. If you've
 /build/unittest
 ```
 
+## IntegrationTest
+The server will performe a integration test on commits that are part of a pull-request.
+
+To ensure that the commit is safe to integrate into the `master` branch the following steps are perfomred.
+
+* Clone the repository that the pull-reuqest came from into a temp project folder
+* Checkout the given commit in the temp folder
+* Performe a merge into master to control that the integration can be performed.
+* Compile the Make file with CMake
+* Compile the project with the Make file
+* Run all unittests and ensure that they are sucssesfull. 
+
+If all the steps are sucessfull a `errorcode 0` is given. If one step fails that corresponding number is returnd as an error code. The reurn values is used internaly by the server.
+
 ## Contributions
 
 ### Emma Good
