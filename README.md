@@ -74,4 +74,4 @@ To make sure the project is in a working state, you can run the tests. If you've
 ### Fredrik Pilhqvist
 * Created integrationTest function that compiles and tests a commit.
 * Documented compiling.
-* Testing server
+* Testing server.
